@@ -1,0 +1,124 @@
+* Editor used : Sublime text 3
+* OS : Windows 7
+
+Repository Setup
+1. Create GibHub Account
+2. Send me username of your github for github organization
+3. Download Git (http://msysgit.github.io/)
+4. Install Git
+	a. Welcome window appears, click Next
+	b. GNU Public License appears, click Next (You can also read. take your time :)
+	c. Select Destination Location, then click Next
+	d. Select Components, check Windows Explorer integration, check Associate .git* config files..., check Associate .sh files ...
+		click Next
+	e. Select Start Menu Folder and click Next.
+	f. Select "Use Git from Windows command prompt" and click Next.
+	g. Select "Checkout as-is, commit as-is" and click Next and wait for the installation to finish.
+	f. Click finish.
+	i. To check if git is successfully installed, open a Command Prompt and type git.
+5. Download SSH Client (http://sourceforge.net/projects/sshwindows/files/OpenSSH%20for%20Windows%20-%20Release/3.8p1-1%2020040709%20Build/setupssh381-20040709.zip/download)
+6. Install SSH
+	a. Extract the zip file
+	b. Run setupssh.exe
+	c. Welcome window appears, click Next.
+	d. License agreement appears, select "I accept..." and click Next.
+	e. Check "Client" only and click Next.
+	f. Specify destination folder and click Next.
+	g. Click install.
+	h. Click Finish.
+	i. To check if ssh is successfully installed, open a Command Prompt and type ssh.
+7. Generate SSH key to be used to push and pull codes to the repo
+	a. Open Command Prompt and type ssh-keygen -t rsa -C "your@email.com"
+		* email address should be the email used in Github account.
+		- just always press enter until finished.
+	b. Open C:\Users\username\.ssh\id_rsa.pub. Copy all of its content and send it to me to give you access to repo without asking for username and password
+
+Local Development and Framework Setup.
+* we will use xampp
+1. Download xampp (https://www.apachefriends.org/download_success.html)
+2. Install xampp
+3. Start apache and mysql
+4. Open a browser and type localhost.
+5. Click security from the left side.
+6. Click http://localhost/security/xamppsecurity.php to add passwords
+7. Set root password for MySQL and xampp panel.
+8. Download SQLYog Community edition (https://code.google.com/p/sqlyog/wiki/Downloads).
+9. Install SQLYog.
+10. Run sqlyog and connect to your mysql local account
+	a. Click New button and put enter a name to you root local mysql account.
+	b. On MySQL tab, 
+		- 	MySQL host Address is localhost.
+		-	username is the root username
+		- 	password is the password you set
+		-	click Test Connection
+		- 	if successful, click Save button and click Connect
+11. Create database for Service Merchandise
+	a. Right click on "root@localhost" and click Create New Database
+	b. Database name is <hostgatorprefix>_servicemerchandise
+	c. Click create
+12. Create a db user for Yardsale db
+	a. Click on User Manager icon from the toolbars.
+	b. Click Add New User
+	 	- Username is <hostgatorprefix>_smerch
+	 	- Password is smerch2014!!
+	 	- Host is localhost
+	 	- Click Create
+	 	- Check Select All and click Save Changes
+	 	- Click close
+13. Connect to db using new account
+ 	a. Press Ctrl + M to connect a new connection
+ 	b. Click New 
+ 	c. Name is local - yardsale
+ 	d. In MySQL Tab,
+ 		- MySQL host address is localhost
+ 		- Username is druidinc_ysale
+ 		- Password is ysale2014!!
+ 		- Database is druidinc_yardsale
+ 	e. Click test Connection
+ 	f. If successful, click Save and click Connect.
+ 14. In your Drive D, create a www folder
+ 15. Open Command Prompt and go to D:\www
+ 16. Register your git account from your local drive
+  	- type git config --global user.name "You name"
+  	- type git config --global user.email <githubemailaddressused>
+  	- type git config --global push.default current
+ 17. Clone the repository
+  	- type git clone git@github.com:DatWeb/ServiceMerchandise.git servicemerchandise
+  	 (if asked, "The authenticity of host.....Are you sure you want to continue conneting?", type yes and press enter)
+  	 wait until finished cloning
+  	- check if cloning is successful, go to D:/www/servicemerchandise
+
+
+Running the whole application
+1. Create virtual host
+	a. Go to your xampp installation folder > apache > conf and open httpd.conf
+	b. Line 502 should be this one: 
+			Include conf/extra/httpd-vhosts.conf
+	c. Go to extra folder and open httpd-vhosts.conf
+	 	- add the line below to the last
+
+	 			<VirtualHost local.main.servicemerchandise>
+				    ServerAdmin admin@localhost.com
+				    DocumentRoot "D:/www/servicemerchandise/public"
+				    ServerName local.main.servicemerchandise
+				    ServerAlias local.main.servicemerchandise
+				    SetEnv APPLICATION_ENV "development"
+				    <Directory "D:/www/servicemerchandise/public">
+				        Options Indexes FollowSymLinks Includes ExecCGI
+				        DirectoryIndex index.php
+				        AllowOverride All
+				        Order allow,deny
+				        Allow from all
+				    Require all granted
+				    </Directory>
+				</VirtualHost>
+
+	d. Open C:\Windows\System32\drivers\etc and modify hosts.file
+	 	- add the line below 
+
+	 		127.0.0.1 	local.main.servicemerchandise
+
+	e. Restart Apache
+	g. From the browser, type http://local.main.servicemerchandise, there should be a grid view.
+
+Tadaaang...that's it. We can now start with development.
